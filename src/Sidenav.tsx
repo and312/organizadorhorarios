@@ -18,6 +18,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
+import ScheduleTable from "./components/ScheduleTable"; // horario
 
 const drawerWidth = 240;
 
@@ -157,7 +158,9 @@ export default function Sidenav() {
           enim praesent elementum facilisis leo vel. Risus at ultrices mi tempus
           imperdiet.
         </Typography>
-        
+        <div>
+          <ScheduleTable />
+        </div>
       </Main>
     </Box>
   );
