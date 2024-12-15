@@ -19,10 +19,14 @@ import ListItemText from '@mui/material/ListItemText';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'; // Icono para regresar
 import SchoolIcon from '@mui/icons-material/School'; // icono para las carreras
 import BookIcon from '@mui/icons-material/Book'; // Icono para los semestres
+import SubjectIcon from '@mui/icons-material/MenuBook'; // Icono para las materias
+import ExpandLess from '@mui/icons-material/ExpandLess'; // ExpandLess y ExpandMore indican si el semestre está expandido o colapsado
+import ExpandMore from '@mui/icons-material/ExpandMore';
+import { Collapse } from '@mui/material'; // para mostrar u ocultar las materias
 //import ScheduleTable from "./components/ScheduleTable"; // horario
 
 // Importacion de las carreras desde el archivo data.ts
-import { data, Carrera, Semestre } from './components/data';
+import { data, Carrera } from './components/data';
 
 const drawerWidth = 340;
 
@@ -89,6 +93,7 @@ export default function Sidenav() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [selectedCarrera, setSelectedCarrera] = React.useState<Carrera | null>(null); // Carrera seleccionada
+  const [expandedSemestre, setExpandedSemestre] = React.useState<string | null>(null); // Semestre expandido
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -100,10 +105,16 @@ export default function Sidenav() {
 
   const handleCarreraClick = (carrera: Carrera) => {
     setSelectedCarrera(carrera); // Guardar la carrera seleccionada
+    setExpandedSemestre(null);; // Reiniciar expansión
   };
 
   const handleBackClick = () => {
     setSelectedCarrera(null); // Regresar a la lista de carreras
+    setExpandedSemestre(null);
+  };
+
+  const handleSemestreClick = (semestreId: string) => {
+    setExpandedSemestre((prev) => (prev === semestreId ? null : semestreId)); // Alternar expandir/colapsar
   };
 
   return (
@@ -168,14 +179,27 @@ export default function Sidenav() {
             </Typography>
             <List>
               {selectedCarrera.semestres.map((semestre) => (
-                <ListItem key={semestre.id} disablePadding>
-                  <ListItemButton>
+                <React.Fragment key={semestre.id}>
+                  <ListItemButton onClick={() => handleSemestreClick(semestre.id)}>
                     <ListItemIcon>
                       <BookIcon />
                     </ListItemIcon>
                     <ListItemText primary={semestre.nombre} />
+                    {expandedSemestre === semestre.id ? <ExpandLess /> : <ExpandMore />}
                   </ListItemButton>
-                </ListItem>
+                  <Collapse in={expandedSemestre === semestre.id} timeout="auto" unmountOnExit>
+                    <List component="div" disablePadding>
+                      {semestre.materias.map((materia) => (
+                        <ListItem key={materia.id} sx={{ pl: 4 }}>
+                          <ListItemIcon>
+                            <SubjectIcon />
+                          </ListItemIcon>
+                          <ListItemText primary={materia.nombre} />
+                        </ListItem>
+                      ))}
+                    </List>
+                  </Collapse>
+                </React.Fragment>
               ))}
             </List>
           </>

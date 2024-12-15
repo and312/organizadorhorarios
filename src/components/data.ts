@@ -12,7 +12,7 @@ interface Grupo {
   horarios: Horario[]; // Horarios asignados al grupo
 }
 
-interface Materia {
+export interface Materia {
   id: string; // Identificador único de la materia
   nombre: string; // Nombre de la materia
   grupos: Grupo[]; // Grupos disponibles para la materia
