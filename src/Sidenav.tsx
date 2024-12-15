@@ -16,11 +16,13 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'; // Icono para regresar
 import SchoolIcon from '@mui/icons-material/School'; // icono para las carreras
-import ScheduleTable from "./components/ScheduleTable"; // horario
+import BookIcon from '@mui/icons-material/Book'; // Icono para los semestres
+//import ScheduleTable from "./components/ScheduleTable"; // horario
 
 // Importacion de las carreras desde el archivo data.ts
-import { data } from './components/data';
+import { data, Carrera, Semestre } from './components/data';
 
 const drawerWidth = 340;
 
@@ -86,6 +88,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 export default function Sidenav() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  const [selectedCarrera, setSelectedCarrera] = React.useState<Carrera | null>(null); // Carrera seleccionada
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -93,6 +96,14 @@ export default function Sidenav() {
 
   const handleDrawerClose = () => {
     setOpen(false);
+  };
+
+  const handleCarreraClick = (carrera: Carrera) => {
+    setSelectedCarrera(carrera); // Guardar la carrera seleccionada
+  };
+
+  const handleBackClick = () => {
+    setSelectedCarrera(null); // Regresar a la lista de carreras
   };
 
   return (
@@ -138,18 +149,56 @@ export default function Sidenav() {
           </IconButton>
         </DrawerHeader>
         <Divider />
-        <List>
-          {data.map((carrera) => (
-            <ListItem key={carrera.id} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  <SchoolIcon />
-                </ListItemIcon>
-                <ListItemText primary={carrera.nombre} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
+        {selectedCarrera ? (
+          // Mostrar los semestres de la carrera seleccionada
+          <>
+            <List>
+              <ListItem disablePadding>
+                <ListItemButton onClick={handleBackClick}>
+                  <ListItemIcon>
+                    <ArrowBackIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Volver a Carreras" />
+                </ListItemButton>
+              </ListItem>
+            </List>
+            <Divider />
+            <Typography variant='subtitle1' sx={{ padding: 2 }}>
+              Semestres en {selectedCarrera.nombre}
+            </Typography>
+            <List>
+              {selectedCarrera.semestres.map((semestre) => (
+                <ListItem key={semestre.id} disablePadding>
+                  <ListItemButton>
+                    <ListItemIcon>
+                      <BookIcon />
+                    </ListItemIcon>
+                    <ListItemText primary={semestre.nombre} />
+                  </ListItemButton>
+                </ListItem>
+              ))}
+            </List>
+          </>
+        ) : (
+          // Mostrar la lista de carreras
+          <>
+            <Typography variant='subtitle1' sx={{ padding: 2 }}>
+              Carreras
+            </Typography>
+            <List>
+              {data.map((carrera) => (
+                <ListItem key={carrera.id} disablePadding>
+                  <ListItemButton onClick={() => handleCarreraClick(carrera)}>
+                    <ListItemIcon>
+                      <SchoolIcon />
+                    </ListItemIcon>
+                    <ListItemText primary={carrera.nombre} />
+                  </ListItemButton>
+                </ListItem>
+              ))}
+            </List>
+          </>
+        )}
         <Divider />
       </Drawer>
       <Main open={open}>
@@ -165,3 +214,4 @@ export default function Sidenav() {
     </Box>
   );
 }
+//

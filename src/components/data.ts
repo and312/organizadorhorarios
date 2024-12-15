@@ -18,13 +18,13 @@ interface Materia {
   grupos: Grupo[]; // Grupos disponibles para la materia
 }
 
-interface Semestre {
+export interface Semestre {
   id: string; // Identificador único del semestre
   nombre: string; // Ejemplo: "Primer Semestre", "Segundo Semestre"
   materias: Materia[]; // Materias disponibles en este semestre
 }
 
-interface Carrera {
+export interface Carrera {
   id: string; // Identificador único de la carrera
   nombre: string; // Nombre de la carrera
   semestres: Semestre[]; // Lista de semestres en esta carrera
