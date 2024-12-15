@@ -16,11 +16,13 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
+import SchoolIcon from '@mui/icons-material/School'; // icono para las carreras
 import ScheduleTable from "./components/ScheduleTable"; // horario
 
-const drawerWidth = 240;
+// Importacion de las carreras desde el archivo data.ts
+import { data } from './components/data';
+
+const drawerWidth = 340;
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
   open?: boolean;
@@ -113,7 +115,7 @@ export default function Sidenav() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            Persistent drawer
+            Cappuchino
           </Typography>
         </Toolbar>
       </AppBar>
@@ -137,13 +139,13 @@ export default function Sidenav() {
         </DrawerHeader>
         <Divider />
         <List>
-          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-            <ListItem key={text} disablePadding>
+          {data.map((carrera) => (
+            <ListItem key={carrera.id} disablePadding>
               <ListItemButton>
                 <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                  <SchoolIcon />
                 </ListItemIcon>
-                <ListItemText primary={text} />
+                <ListItemText primary={carrera.nombre} />
               </ListItemButton>
             </ListItem>
           ))}
@@ -152,15 +154,13 @@ export default function Sidenav() {
       </Drawer>
       <Main open={open}>
         <DrawerHeader />
-        <Typography sx={{ marginBottom: 2 }}>
+        {/* <Typography sx={{ marginBottom: 2 }}>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-          tempor incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus non
-          enim praesent elementum facilisis leo vel. Risus at ultrices mi tempus
-          imperdiet.
+          tempor incididunt ut labore et dolore magna aliqua.
         </Typography>
         <div>
           <ScheduleTable />
-        </div>
+        </div> */}
       </Main>
     </Box>
   );
