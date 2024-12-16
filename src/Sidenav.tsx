@@ -17,9 +17,11 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'; // Icono para regresar
-import SchoolIcon from '@mui/icons-material/School'; // icono para las carreras
+import SchoolIcon from '@mui/icons-material/School'; // Icono para las carreras
 import BookIcon from '@mui/icons-material/Book'; // Icono para los semestres
 import SubjectIcon from '@mui/icons-material/MenuBook'; // Icono para las materias
+import GroupIcon from '@mui/icons-material/Group'; // Icono para los grupos
+import Checkbox from '@mui/material/Checkbox'; // Check para seleccionar grupo
 import ExpandLess from '@mui/icons-material/ExpandLess'; // ExpandLess y ExpandMore indican si el semestre está expandido o colapsado
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import { Collapse } from '@mui/material'; // para mostrar u ocultar las materias
@@ -94,6 +96,7 @@ export default function Sidenav() {
   const [open, setOpen] = React.useState(false);
   const [selectedCarrera, setSelectedCarrera] = React.useState<Carrera | null>(null); // Carrera seleccionada
   const [expandedSemestre, setExpandedSemestre] = React.useState<string | null>(null); // Semestre expandido
+  const [expandedMateria, setExpandedMateria] = React.useState<string | null>(null); // Estado para controlar las materias expandidas
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -106,15 +109,23 @@ export default function Sidenav() {
   const handleCarreraClick = (carrera: Carrera) => {
     setSelectedCarrera(carrera); // Guardar la carrera seleccionada
     setExpandedSemestre(null);; // Reiniciar expansión
+    setExpandedMateria(null); // Reiniciar expansión de materias
   };
 
   const handleBackClick = () => {
     setSelectedCarrera(null); // Regresar a la lista de carreras
     setExpandedSemestre(null);
+    setExpandedMateria(null);
   };
 
   const handleSemestreClick = (semestreId: string) => {
     setExpandedSemestre((prev) => (prev === semestreId ? null : semestreId)); // Alternar expandir/colapsar
+    setExpandedMateria(null); // Reiniciar expansión de materias al cambiar de semestre
+  };
+
+  // Función para manejar la expansión/colapso de materias
+  const handleMateriaClick = (materiaId: string) => {
+    setExpandedMateria((prev) => (prev === materiaId ? null : materiaId));
   };
 
   return (
@@ -190,12 +201,34 @@ export default function Sidenav() {
                   <Collapse in={expandedSemestre === semestre.id} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding>
                       {semestre.materias.map((materia) => (
-                        <ListItem key={materia.id} sx={{ pl: 4 }}>
-                          <ListItemIcon>
-                            <SubjectIcon />
-                          </ListItemIcon>
-                          <ListItemText primary={materia.nombre} />
-                        </ListItem>
+                        <React.Fragment key={materia.id}>
+                          <ListItemButton
+                            sx={{ pl: 4 }}
+                            onClick={() => handleMateriaClick(materia.id)}
+                          >
+                            <ListItemIcon>
+                              <SubjectIcon />
+                            </ListItemIcon>
+                            <ListItemText primary={materia.nombre} />
+                            {expandedMateria === materia.id ? <ExpandLess /> : <ExpandMore />}
+                          </ListItemButton>
+                          {/* Mostrar los grupos de la materia seleccionada */}
+                          <Collapse in={expandedMateria === materia.id} timeout="auto" unmountOnExit>
+                            <List component="div" disablePadding>
+                              {materia.grupos.map((grupo) => (
+                                <ListItem key={grupo.id} sx={{ pl: 6 }}>
+                                  <ListItemIcon>
+                                    <GroupIcon />
+                                  </ListItemIcon>
+                                  <ListItemText
+                                    primary={`Grupo ${grupo.id} - ${grupo.docente}`}
+                                  />
+                                  <Checkbox />
+                                </ListItem>
+                              ))}
+                            </List>
+                          </Collapse>
+                        </React.Fragment>
                       ))}
                     </List>
                   </Collapse>
