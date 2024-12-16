@@ -9,10 +9,34 @@ import {
   Paper,
 } from "@mui/material";
 
+interface Horario {
+  dia: string;
+  horaInicio: string;
+  horaFin: string;
+  materia: string;
+  grupo: string;
+}
+
 const daysOfWeek = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
 const hours = ["06:45 AM", "08:15 AM", "09:45 AM", "11:15 AM", "12:45 PM", "14:15 PM", "15:45 PM", "17:15 PM", "18:45 PM", "20:15 PM"];
 
-const ScheduleTable = () => {
+interface ScheduleTableProps {
+  horarios: Horario[];
+}
+
+const ScheduleTable: React.FC<ScheduleTableProps> = ({ horarios }) => {
+  const getCellContent = (day: string, hour: string) => {
+    return horarios
+      .filter(
+        (h) =>
+          h.dia === day &&
+          hour >= h.horaInicio &&
+          hour < h.horaFin
+      )
+      .map((h) => `${h.materia} - ${h.grupo}`)
+      .join(", ");
+  };
+
   return (
     <TableContainer 
       component={Paper}
@@ -46,16 +70,17 @@ const ScheduleTable = () => {
 
         {/* Cuerpo con horas y celdas vacías */}
         <TableBody>
-          {hours.map((hour, index) => (
-            <TableRow key={index}>
+          {hours.map((hour) => (
+            <TableRow key={hour}>
               <TableCell style={{ border: "1px solid #ddd" }}>{hour}</TableCell>
-              {daysOfWeek.map((_, dayIndex) => (
+              {daysOfWeek.map((day) => (
                 <TableCell
-                  key={dayIndex}
+                  key={`${day}-${hour}`}
                   align="center"
                   style={{ border: "1px solid #ddd" }}
                 >
                   {/* Aquí puedes agregar contenido como clases o eventos */}
+                  {getCellContent(day, hour)}
                 </TableCell>
               ))}
             </TableRow>

@@ -28,7 +28,7 @@ import { Collapse } from '@mui/material'; // para mostrar u ocultar las materias
 import ScheduleTable from "./components/ScheduleTable"; // Componente tabla de horario
 
 // Importacion de las carreras desde el archivo data.ts
-import { data, Carrera, Horario } from './components/data';
+import { data, Carrera, Grupo } from './components/data';
 
 const drawerWidth = 340;
 
@@ -91,21 +91,13 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   justifyContent: 'flex-end',
 }));
 
-interface SelectedHorario {
-  dia: string;
-  horaInicio: string;
-  horaFin: string;
-  materia: string;
-  grupo: string;
-}
-
 export default function Sidenav() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [selectedCarrera, setSelectedCarrera] = React.useState<Carrera | null>(null); // Carrera seleccionada
   const [expandedSemestre, setExpandedSemestre] = React.useState<string | null>(null); // Semestre expandido
   const [expandedMateria, setExpandedMateria] = React.useState<string | null>(null); // Estado para controlar las materias expandidas
-  const [selectedHorarios, setSelectedHorarios] = React.useState<SelectedHorario[]>([]); // Estado de los horarios de un grupo
+  const [selectedGroups, setSelectedGroups] = React.useState<Grupo[]>([]);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -137,34 +129,15 @@ export default function Sidenav() {
     setExpandedMateria((prev) => (prev === materiaId ? null : materiaId));
   };
 
-  // Estado para manejar los horarios seleccionados 
-  const handleGrupoCheck = (materia: string, grupo: string, horarios: Horario[]) => {
-    setSelectedHorarios((prev) => {
-      const alreadySelected = prev.some(
-        (item) => item.materia === materia && item.grupo === grupo
-      );
-      if (alreadySelected) {
-        return prev.filter(
-          (item) => !(item.materia === materia && item.grupo === grupo)
-        );
+  // Estado para manejar los horarios seleccionados para los colores
+  const handleGroupCheck = (grupo: Grupo, checked: boolean) => {
+    setSelectedGroups((prev) => {
+      if (checked) {
+        return [...prev, grupo];
       } else {
-        const newHorarios = horarios.map((h) => ({
-          dia: h.dia,
-          horaInicio: h.horaInicio,
-          horaFin: h.horaFin,
-          materia,
-          grupo,
-        }));
-        return [...prev, ...newHorarios];
+        return prev.filter((g) => g.id !== grupo.id);
       }
     });
-  };
-
-  // Comprueba si un grupo específico ya está en selectedHorarios
-  const isGrupoChecked = (materia: string, grupo: string) => {
-    return selectedHorarios.some(
-      (h) => h.materia === materia && h.grupo === grupo
-    );
   };
 
   return (
@@ -263,10 +236,9 @@ export default function Sidenav() {
                                     primary={`Grupo ${grupo.id} - ${grupo.docente}`}
                                   />
                                   <Checkbox 
-                                    checked={isGrupoChecked(materia.nombre, grupo.id)} // Sincroniza visualmente el estado del checkbox
-                                    onChange={() =>
-                                      handleGrupoCheck(materia.nombre, grupo.id, grupo.horarios)
-                                    }
+                                    checked={selectedGroups.some((g) => g.id === grupo.id)} // Verificar si el grupo está seleccionado
+                                    // Llama a la funcion que maneja los horarios selesccionados (funcion handleGroupCheck)
+                                    onChange={(e) => handleGroupCheck(grupo, e.target.checked)}
                                   />
                                 </ListItem>
                               ))}
@@ -304,7 +276,7 @@ export default function Sidenav() {
       </Drawer>
       <Main open={open}>
         <DrawerHeader />
-        <ScheduleTable horarios={selectedHorarios} /> {/* Tabla de horarios */}
+        <ScheduleTable grupos={selectedGroups} /> {/* pasa el estado selectedHorarios a ScheduleTable */}
       </Main>
     </Box>
   );

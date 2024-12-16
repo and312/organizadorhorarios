@@ -1,12 +1,12 @@
 // src/data.ts
 
-interface Horario {
+export interface Horario {
   dia: string; // Ejemplo: "Lunes", "Martes"
   horaInicio: string; // Ejemplo: "08:00"
   horaFin: string; // Ejemplo: "09:45"
 }
 
-interface Grupo {
+export interface Grupo {
   id: string; // Identificador único del grupo
   docente: string; // Nombre del docente
   horarios: Horario[]; // Horarios asignados al grupo
@@ -47,16 +47,16 @@ export const data: Carrera[] = [
                 id: "G1",
                 docente: "Juan Perez",
                 horarios: [
-                  { dia: "Lunes", horaInicio: "08:00", horaFin: "09:30" },
-                  { dia: "Miércoles", horaInicio: "10:00", horaFin: "11:30" },
+                  { dia: "Lunes", horaInicio: "08:15", horaFin: "09:45" },
+                  { dia: "Miércoles", horaInicio: "09:45", horaFin: "11:15" },
                 ],
               },
               {
                 id: "G2",
                 docente: "Maria Lopez",
                 horarios: [
-                  { dia: "Martes", horaInicio: "09:00", horaFin: "10:30" },
-                  { dia: "Jueves", horaInicio: "12:00", horaFin: "13:30" },
+                  { dia: "Martes", horaInicio: "09:45", horaFin: "11:15" },
+                  { dia: "Jueves", horaInicio: "12:45", horaFin: "14:15" },
                 ],
               },
             ],
@@ -69,8 +69,8 @@ export const data: Carrera[] = [
                 id: "G1",
                 docente: "Carlos Gomez",
                 horarios: [
-                  { dia: "Lunes", horaInicio: "10:00", horaFin: "11:30" },
-                  { dia: "Miércoles", horaInicio: "08:00", horaFin: "09:30" },
+                  { dia: "Martes", horaInicio: "09:45", horaFin: "11:15" },
+                  { dia: "Miércoles", horaInicio: "08:15", horaFin: "09:45" },
                 ],
               },
             ],
@@ -89,8 +89,8 @@ export const data: Carrera[] = [
                 id: "G1",
                 docente: "Luis Torres",
                 horarios: [
-                  { dia: "Lunes", horaInicio: "13:00", horaFin: "14:30" },
-                  { dia: "Miércoles", horaInicio: "15:00", horaFin: "16:30" },
+                  { dia: "Lunes", horaInicio: "12:45", horaFin: "14:15" },
+                  { dia: "Miércoles", horaInicio: "15:45", horaFin: "17:15" },
                 ],
               },
             ],
@@ -103,8 +103,8 @@ export const data: Carrera[] = [
                 id: "G1",
                 docente: "Ana Castillo",
                 horarios: [
-                  { dia: "Martes", horaInicio: "08:00", horaFin: "09:30" },
-                  { dia: "Jueves", horaInicio: "10:00", horaFin: "11:30" },
+                  { dia: "Martes", horaInicio: "08:15", horaFin: "09:45" },
+                  { dia: "Jueves", horaInicio: "09:45", horaFin: "11:15" },
                 ],
               },
             ],
@@ -129,8 +129,8 @@ export const data: Carrera[] = [
                 id: "G1",
                 docente: "Jose Hernandez",
                 horarios: [
-                  { dia: "Lunes", horaInicio: "07:00", horaFin: "08:30" },
-                  { dia: "Miércoles", horaInicio: "09:00", horaFin: "10:30" },
+                  { dia: "Lunes", horaInicio: "06:45", horaFin: "08:15" },
+                  { dia: "Miércoles", horaInicio: "09:45", horaFin: "11:15" },
                 ],
               },
             ],
@@ -149,8 +149,8 @@ export const data: Carrera[] = [
                 id: "G1",
                 docente: "Sofia Rivera",
                 horarios: [
-                  { dia: "Martes", horaInicio: "11:00", horaFin: "12:30" },
-                  { dia: "Jueves", horaInicio: "14:00", horaFin: "15:30" },
+                  { dia: "Martes", horaInicio: "11:15", horaFin: "12:45" },
+                  { dia: "Jueves", horaInicio: "18:45", horaFin: "20:15" },
                 ],
               },
             ],
