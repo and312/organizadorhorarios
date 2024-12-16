@@ -25,7 +25,7 @@ import Checkbox from '@mui/material/Checkbox'; // Check para seleccionar grupo
 import ExpandLess from '@mui/icons-material/ExpandLess'; // ExpandLess y ExpandMore indican si el semestre está expandido o colapsado
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import { Collapse } from '@mui/material'; // para mostrar u ocultar las materias
-//import ScheduleTable from "./components/ScheduleTable"; // horario
+import ScheduleTable from "./components/ScheduleTable"; // Componente tabla de horario
 
 // Importacion de las carreras desde el archivo data.ts
 import { data, Carrera } from './components/data';
@@ -260,13 +260,7 @@ export default function Sidenav() {
       </Drawer>
       <Main open={open}>
         <DrawerHeader />
-        {/* <Typography sx={{ marginBottom: 2 }}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-          tempor incididunt ut labore et dolore magna aliqua.
-        </Typography>
-        <div>
-          <ScheduleTable />
-        </div> */}
+        <ScheduleTable /> {/* Tabla de horarios */}
       </Main>
     </Box>
   );
