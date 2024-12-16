@@ -33,8 +33,12 @@ const ScheduleTable: React.FC<ScheduleTableProps> = ({ horarios }) => {
           hour >= h.horaInicio &&
           hour < h.horaFin
       )
-      .map((h) => `${h.materia} - ${h.grupo}`)
-      .join(", ");
+      .map((h) => (
+        <div>
+          <div style={{ fontWeight: "bold" }}>{h.materia}</div>
+          <div>{`Grupo ${h.grupo}`}</div>
+        </div>
+      ));
   };
 
   return (

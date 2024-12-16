@@ -25,7 +25,7 @@ import Checkbox from '@mui/material/Checkbox'; // Check para seleccionar grupo
 import CleaningServicesIcon from '@mui/icons-material/CleaningServices';
 import ExpandLess from '@mui/icons-material/ExpandLess'; // ExpandLess y ExpandMore indican si el semestre está expandido o colapsado
 import ExpandMore from '@mui/icons-material/ExpandMore';
-import { Button, Collapse } from '@mui/material'; // para mostrar u ocultar las materias
+import { Button, Collapse, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material'; // para mostrar u ocultar las materias
 import ScheduleTable from "./components/ScheduleTable"; // Componente tabla de horario
 
 // Importacion de las carreras desde el archivo data.ts
@@ -107,6 +107,7 @@ export default function Sidenav() {
   const [expandedSemestre, setExpandedSemestre] = React.useState<string | null>(null); // Semestre expandido
   const [expandedMateria, setExpandedMateria] = React.useState<string | null>(null); // Estado para controlar las materias expandidas
   const [selectedHorarios, setSelectedHorarios] = React.useState<SelectedHorario[]>([]); // Estado de los horarios de un grupo
+  const [openDialog, setOpenDialog] = React.useState(false); // Estado del dialogo de confirmación de restablecimiento
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -115,6 +116,12 @@ export default function Sidenav() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
+  // Abre el Dialog de confirmacion
+  const handleOpenDialog = () => setOpenDialog(true);
+
+  // Cierra el Dialog de confirmacion
+  const handleCloseDialog = () => setOpenDialog(false);
 
   const handleCarreraClick = (carrera: Carrera) => {
     setSelectedCarrera(carrera); // Guardar la carrera seleccionada
@@ -168,9 +175,10 @@ export default function Sidenav() {
     );
   };
 
-  // Limpia todas las selecciones
-  const clearAllSelections = () => {
-    setSelectedHorarios([]); // Reinicia el estado de los horarios seleccionados
+  // Restablece los horarios después de confirmar
+  const handleConfirmClear = () => {
+    setSelectedHorarios([]); // Limpia los horarios seleccionados
+    setOpenDialog(false); // Cierra el Dialog
   };
 
   return (
@@ -314,14 +322,33 @@ export default function Sidenav() {
         <Box sx={{ flexGrow: 1 }}>
           <ScheduleTable horarios={selectedHorarios} />
         </Box>
-        {/* Botón para limpiar todos los grupos seleccionados */}
+        {/* Botón para restablecer el horario */}
         <Box sx={{ display: 'flex', justifyContent: 'center', padding: 2 }}>
-          <Button variant="contained" onClick={clearAllSelections} endIcon={<CleaningServicesIcon />}>
+          <Button variant="contained" onClick={handleOpenDialog} endIcon={<CleaningServicesIcon />}>
             Restablecer
           </Button>
+          {/* Dialog de confirmación para restablecer horario */}
+          <Dialog
+            open={openDialog}
+            onClose={handleCloseDialog}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogTitle id="alert-dialog-title">
+              {"¿Estás seguro de que deseas restablecer el horario?"}
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+                Esta acción eliminará todos los grupos seleccionados.
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleCloseDialog}>Cancelar</Button>
+              <Button onClick={handleConfirmClear} autoFocus>Restablecer</Button>
+            </DialogActions>
+          </Dialog>
         </Box>
       </Main>
     </Box>
   );
 }
-//
