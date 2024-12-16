@@ -22,9 +22,10 @@ import BookIcon from '@mui/icons-material/Book'; // Icono para los semestres
 import SubjectIcon from '@mui/icons-material/MenuBook'; // Icono para las materias
 import GroupIcon from '@mui/icons-material/Group'; // Icono para los grupos
 import Checkbox from '@mui/material/Checkbox'; // Check para seleccionar grupo
+import CleaningServicesIcon from '@mui/icons-material/CleaningServices';
 import ExpandLess from '@mui/icons-material/ExpandLess'; // ExpandLess y ExpandMore indican si el semestre está expandido o colapsado
 import ExpandMore from '@mui/icons-material/ExpandMore';
-import { Collapse } from '@mui/material'; // para mostrar u ocultar las materias
+import { Button, Collapse } from '@mui/material'; // para mostrar u ocultar las materias
 import ScheduleTable from "./components/ScheduleTable"; // Componente tabla de horario
 
 // Importacion de las carreras desde el archivo data.ts
@@ -167,6 +168,11 @@ export default function Sidenav() {
     );
   };
 
+  // Limpia todas las selecciones
+  const clearAllSelections = () => {
+    setSelectedHorarios([]); // Reinicia el estado de los horarios seleccionados
+  };
+
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
@@ -304,7 +310,16 @@ export default function Sidenav() {
       </Drawer>
       <Main open={open}>
         <DrawerHeader />
-        <ScheduleTable horarios={selectedHorarios} /> {/* Tabla de horarios */}
+        {/* Tabla de horarios */}
+        <Box sx={{ flexGrow: 1 }}>
+          <ScheduleTable horarios={selectedHorarios} />
+        </Box>
+        {/* Botón para limpiar todos los grupos seleccionados */}
+        <Box sx={{ display: 'flex', justifyContent: 'center', padding: 2 }}>
+          <Button variant="contained" onClick={clearAllSelections} endIcon={<CleaningServicesIcon />}>
+            Restablecer
+          </Button>
+        </Box>
       </Main>
     </Box>
   );
