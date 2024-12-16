@@ -1,4 +1,4 @@
-//import React from "react";
+import React, { useMemo } from "react";
 import {
   Table,
   TableBody,
@@ -25,6 +25,26 @@ interface ScheduleTableProps {
 }
 
 const ScheduleTable: React.FC<ScheduleTableProps> = ({ horarios }) => {
+  // Genera colores únicos para cada grupo
+  const groupColors = useMemo(() => {
+    const colors: { [key: string]: string } = {};
+    const colorPalette = [
+      "#FFCDD2", "#C8E6C9", "#BBDEFB", "#FFF9C4", "#D1C4E9", "#B2DFDB", "#FFECB3", "#F8BBD0"
+    ];
+
+    let colorIndex = 0;
+
+    horarios.forEach((h) => {
+      const groupKey = `${h.materia}-${h.grupo}`;
+      if (!colors[groupKey]) {
+        colors[groupKey] = colorPalette[colorIndex % colorPalette.length];
+        colorIndex++;
+      }
+    });
+    return colors;
+  }, [horarios]);
+
+  // Renderiza el contenido de cada celda
   const getCellContent = (day: string, hour: string) => {
     return horarios
       .filter(
@@ -33,12 +53,30 @@ const ScheduleTable: React.FC<ScheduleTableProps> = ({ horarios }) => {
           hour >= h.horaInicio &&
           hour < h.horaFin
       )
-      .map((h) => (
-        <div>
+      .map((h, index) => {
+        const groupKey = `${h.materia}-${h.grupo}`;
+        const backgroundColor = groupColors[groupKey];
+        return (
+          <div
+            key={index}
+            style={{
+              backgroundColor,
+              padding: "8px",
+              borderRadius: "4px",
+              margin: "2px",
+              color: "#000",
+              fontWeight: "bold",
+            }}
+          >
+            <div>{h.materia}</div>
+            <div>{`Grupo ${h.grupo}`}</div>
+          </div>
+        );
+        /*<div>
           <div style={{ fontWeight: "bold" }}>{h.materia}</div>
           <div>{`Grupo ${h.grupo}`}</div>
-        </div>
-      ));
+        </div>*/
+      });
   };
 
   return (
@@ -46,16 +84,11 @@ const ScheduleTable: React.FC<ScheduleTableProps> = ({ horarios }) => {
       component={Paper}
       sx={{
         overflowX: "auto",
-        width: {
-          xs: "100%", // Pantallas pequeñas
-          sm: "100%", // Pantallas medianas
-          md: "90%", // Pantallas grandes
-          lg: "90%", // Pantallas muy grandes
-        },
+        maxHeight: "80vh", // Scroll vertical
         margin: "auto",
       }}
     >
-      <Table>
+      <Table stickyHeader>
         {/* Cabecera con días de la semana */}
         <TableHead>
           <TableRow>
@@ -81,9 +114,12 @@ const ScheduleTable: React.FC<ScheduleTableProps> = ({ horarios }) => {
                 <TableCell
                   key={`${day}-${hour}`}
                   align="center"
-                  style={{ border: "1px solid #ddd" }}
+                  style={{
+                    border: "1px solid #ddd",
+                    position: "relative",
+                    verticalAlign: "top",
+                  }}
                 >
-                  {/* Aquí puedes agregar contenido como clases o eventos */}
                   {getCellContent(day, hour)}
                 </TableCell>
               ))}

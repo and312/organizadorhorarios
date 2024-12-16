@@ -239,7 +239,7 @@ export default function Sidenav() {
             </List>
             <Divider />
             <Typography variant='subtitle1' sx={{ padding: 2 }}>
-              Semestres en {selectedCarrera.nombre}
+              {selectedCarrera.nombre} {/*Semestressss*/}
             </Typography>
             <List>
               {selectedCarrera.semestres.map((semestre) => (
@@ -343,8 +343,8 @@ export default function Sidenav() {
               </DialogContentText>
             </DialogContent>
             <DialogActions>
-              <Button onClick={handleCloseDialog}>Cancelar</Button>
-              <Button onClick={handleConfirmClear} autoFocus>Restablecer</Button>
+              <Button onClick={handleCloseDialog} variant="contained">Cancelar</Button>
+              <Button onClick={handleConfirmClear} autoFocus color="error" variant="contained">Restablecer</Button>
             </DialogActions>
           </Dialog>
         </Box>
