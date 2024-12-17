@@ -16,16 +16,18 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import html2canvas from "html2canvas"; // Biblioteca para descargar el horario como imagen
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'; // Icono para regresar
 import SchoolIcon from '@mui/icons-material/School'; // Icono para las carreras
 import BookIcon from '@mui/icons-material/Book'; // Icono para los semestres
 import SubjectIcon from '@mui/icons-material/MenuBook'; // Icono para las materias
 import GroupIcon from '@mui/icons-material/Group'; // Icono para los grupos
 import Checkbox from '@mui/material/Checkbox'; // Check para seleccionar grupo
-import CleaningServicesIcon from '@mui/icons-material/CleaningServices';
+import CleaningServicesIcon from '@mui/icons-material/CleaningServices'; // Icono para restablecer horario
+import ImageIcon from '@mui/icons-material/Image'; // Icono para guardar horario como imagen
 import ExpandLess from '@mui/icons-material/ExpandLess'; // ExpandLess y ExpandMore indican si el semestre está expandido o colapsado
 import ExpandMore from '@mui/icons-material/ExpandMore';
-import { Button, Collapse, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material'; // para mostrar u ocultar las materias
+import { Button, Collapse, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Stack } from '@mui/material'; // para mostrar u ocultar las materias
 import ScheduleTable from "./components/ScheduleTable"; // Componente tabla de horario
 
 // Importacion de las carreras desde el archivo data.ts
@@ -181,6 +183,23 @@ export default function Sidenav() {
     setOpenDialog(false); // Cierra el Dialog
   };
 
+  // Función para capturar la tabla y guardarla como imagen
+  const handleDownloadImage = () => {
+    const tableElement = document.getElementById('schedule-table'); // Obtiene el ID del contenedor de la tabla
+    if (tableElement) {
+      html2canvas(tableElement, {
+        //scrollY: -window.scrollY,
+        backgroundColor: "#FFFFFF", // Forzar fondo blanco de la tabla de horario ********
+        scale: 2, // Aumentar la calidad de la imagen
+      }).then((canvas) => {
+        const link = document.createElement('a');
+        link.download = 'horario.png'; // Nombre del archivo descargado
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      });
+    }
+  };
+
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
@@ -322,31 +341,37 @@ export default function Sidenav() {
         <Box sx={{ flexGrow: 1 }}>
           <ScheduleTable horarios={selectedHorarios} />
         </Box>
-        {/* Botón para restablecer el horario */}
         <Box sx={{ display: 'flex', justifyContent: 'center', padding: 2 }}>
-          <Button variant="contained" onClick={handleOpenDialog} endIcon={<CleaningServicesIcon />}>
-            Restablecer
-          </Button>
-          {/* Dialog de confirmación para restablecer horario */}
-          <Dialog
-            open={openDialog}
-            onClose={handleCloseDialog}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
-          >
-            <DialogTitle id="alert-dialog-title">
-              {"¿Estás seguro de que deseas restablecer el horario?"}
-            </DialogTitle>
-            <DialogContent>
-              <DialogContentText id="alert-dialog-description">
-                Esta acción eliminará todos los grupos seleccionados.
-              </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleCloseDialog} variant="contained">Cancelar</Button>
-              <Button onClick={handleConfirmClear} autoFocus color="error" variant="contained">Restablecer</Button>
-            </DialogActions>
-          </Dialog>
+          <Stack direction="row" spacing={2}>
+            {/* Botón para RESTABLECER el horario */}
+            <Button variant="contained" onClick={handleOpenDialog} startIcon={<CleaningServicesIcon />}>
+              Restablecer
+            </Button>
+            {/* Dialog de confirmación para restablecer horario */}
+            <Dialog
+              open={openDialog}
+              onClose={handleCloseDialog}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+            >
+              <DialogTitle id="alert-dialog-title">
+                {"¿Estás seguro de que deseas restablecer el horario?"}
+              </DialogTitle>
+              <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                  Esta acción eliminará todos los grupos seleccionados.
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleCloseDialog} variant="contained">Cancelar</Button>
+                <Button onClick={handleConfirmClear} autoFocus color="error" variant="contained">Restablecer</Button>
+              </DialogActions>
+            </Dialog>
+            {/* Botón para GUARDAR el horario como imagen */}
+            <Button variant="contained" onClick={handleDownloadImage} endIcon={<ImageIcon />}>
+              Guardar
+            </Button>
+          </Stack>
         </Box>
       </Main>
     </Box>

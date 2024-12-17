@@ -63,9 +63,9 @@ const ScheduleTable: React.FC<ScheduleTableProps> = ({ horarios }) => {
               backgroundColor,
               padding: "8px",
               borderRadius: "4px",
-              margin: "2px",
+              margin: "-4px", // "2px"
               color: "#000",
-              fontWeight: "bold",
+              //fontWeight: "bold",
             }}
           >
             <div>{h.materia}</div>
@@ -81,6 +81,7 @@ const ScheduleTable: React.FC<ScheduleTableProps> = ({ horarios }) => {
 
   return (
     <TableContainer 
+      id="schedule-table" // ID agregado para la captura como imagen, identifica la tabla
       component={Paper}
       sx={{
         overflowX: "auto",
@@ -117,7 +118,7 @@ const ScheduleTable: React.FC<ScheduleTableProps> = ({ horarios }) => {
                   style={{
                     border: "1px solid #ddd",
                     position: "relative",
-                    verticalAlign: "top",
+                    //verticalAlign: "top", // los cuadros de colores estaran en la parte de superior
                   }}
                 >
                   {getCellContent(day, hour)}
