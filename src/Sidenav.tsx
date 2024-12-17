@@ -25,6 +25,8 @@ import GroupIcon from '@mui/icons-material/Group'; // Icono para los grupos
 import Checkbox from '@mui/material/Checkbox'; // Check para seleccionar grupo
 import CleaningServicesIcon from '@mui/icons-material/CleaningServices'; // Icono para restablecer horario
 import ImageIcon from '@mui/icons-material/Image'; // Icono para guardar horario como imagen
+import DarkModeIcon from '@mui/icons-material/DarkMode'; // Icono para el mode oscuro
+import InfoIcon from '@mui/icons-material/Info'; // Icono de información
 import ExpandLess from '@mui/icons-material/ExpandLess'; // ExpandLess y ExpandMore indican si el semestre está expandido o colapsado
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import { Button, Collapse, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Stack } from '@mui/material'; // para mostrar u ocultar las materias
@@ -222,6 +224,19 @@ export default function Sidenav() {
           <Typography variant="h6" noWrap component="div">
             Cappuchino
           </Typography>
+          <Box sx={{ flexGrow: 1 }} />
+          <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+            <IconButton size="large" aria-label="show 4 new mails" color="inherit">
+              <InfoIcon />
+            </IconButton>
+            <IconButton
+              size="large"
+              aria-label="show 17 new notifications"
+              color="inherit"
+            >
+              <DarkModeIcon />
+            </IconButton>
+          </Box>
         </Toolbar>
       </AppBar>
       <Drawer
