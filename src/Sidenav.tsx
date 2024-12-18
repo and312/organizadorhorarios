@@ -26,10 +26,10 @@ import Checkbox from '@mui/material/Checkbox'; // Check para seleccionar grupo
 import CleaningServicesIcon from '@mui/icons-material/CleaningServices'; // Icono para restablecer horario
 import ImageIcon from '@mui/icons-material/Image'; // Icono para guardar horario como imagen
 import DarkModeIcon from '@mui/icons-material/DarkMode'; // Icono para el mode oscuro
-import InfoIcon from '@mui/icons-material/Info'; // Icono de información
+import HelpIcon from '@mui/icons-material/Help'; // Icono de preguntas frecuentes
 import ExpandLess from '@mui/icons-material/ExpandLess'; // ExpandLess y ExpandMore indican si el semestre está expandido o colapsado
 import ExpandMore from '@mui/icons-material/ExpandMore';
-import { Button, Collapse, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Stack } from '@mui/material'; // para mostrar u ocultar las materias
+import { Button, Collapse, Dialog, DialogActions, DialogContent, DialogContentText, DialogProps, DialogTitle, Stack } from '@mui/material'; // para mostrar u ocultar las materias
 import ScheduleTable from "./components/ScheduleTable"; // Componente tabla de horario
 
 // Importacion de las carreras desde el archivo data.ts
@@ -112,6 +112,8 @@ export default function Sidenav() {
   const [expandedMateria, setExpandedMateria] = React.useState<string | null>(null); // Estado para controlar las materias expandidas
   const [selectedHorarios, setSelectedHorarios] = React.useState<SelectedHorario[]>([]); // Estado de los horarios de un grupo
   const [openDialog, setOpenDialog] = React.useState(false); // Estado del dialogo de confirmación de restablecimiento
+  const [openDialogFAQ, setOpenDialogFAQ] = React.useState(false); // Estado del dialogo de FAQ
+  const [scroll, setScroll] = React.useState<DialogProps['scroll']>('paper'); // Scroll sobre el mismo cuadro de dialogo de FAQ
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -126,6 +128,17 @@ export default function Sidenav() {
 
   // Cierra el Dialog de confirmacion
   const handleCloseDialog = () => setOpenDialog(false);
+
+  // Abre el Dialog de preguntas frecuentes
+  const handleClickOpen = (scrollType: DialogProps['scroll']) => () => {
+    setOpenDialogFAQ(true);
+    setScroll(scrollType);
+  };
+
+  // Cierra el Dialog de preguntas frecuentes
+  const handleCloseDialogFAQ = () => {
+    setOpenDialogFAQ(false);
+  };
 
   const handleCarreraClick = (carrera: Carrera) => {
     setSelectedCarrera(carrera); // Guardar la carrera seleccionada
@@ -226,9 +239,27 @@ export default function Sidenav() {
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-              <InfoIcon />
+            <IconButton onClick={handleClickOpen('paper')} size="large" aria-label="show 4 new mails" color="inherit">
+              <HelpIcon />
             </IconButton>
+            {/* Dialog de preguntas frecuentes */}
+            <Dialog
+              open={openDialogFAQ}
+              onClose={handleCloseDialogFAQ}
+              scroll={scroll}
+              aria-labelledby="scroll-dialog-title"
+              aria-describedby="scroll-dialog-description"
+            >
+              <DialogTitle id="scroll-dialog-title">Ayuda</DialogTitle>
+              <DialogContent dividers={scroll === 'paper'}>
+                <DialogContentText id="scroll-dialog-description">
+                  Contenidoooooo de las preguntasssssssssss
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleCloseDialogFAQ}>Aceptar</Button>
+              </DialogActions>
+            </Dialog>
             <IconButton
               size="large"
               aria-label="show 17 new notifications"
