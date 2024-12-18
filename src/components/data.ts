@@ -37,14 +37,14 @@ export const data: Carrera[] = [
     semestres: [
       {
         id: "1",
-        nombre: "Primer Semestre",
+        nombre: "1er Semestre",
         materias: [
           {
             id: "1",
             nombre: "Introducción a la Programación",
             grupos: [
               {
-                id: "G1",
+                id: "1", // Para los nombres en los grupos
                 docente: "Juan Perez",
                 horarios: [
                   { dia: "Lunes", horaInicio: "08:15", horaFin: "09:45" },
@@ -52,7 +52,7 @@ export const data: Carrera[] = [
                 ],
               },
               {
-                id: "G2",
+                id: "2",
                 docente: "Maria Lopez",
                 horarios: [
                   { dia: "Martes", horaInicio: "09:45", horaFin: "11:15" },
@@ -66,7 +66,7 @@ export const data: Carrera[] = [
             nombre: "Matemáticas Básicas",
             grupos: [
               {
-                id: "G1",
+                id: "1",
                 docente: "Carlos Gomez",
                 horarios: [
                   { dia: "Martes", horaInicio: "09:45", horaFin: "11:15" },
@@ -79,14 +79,14 @@ export const data: Carrera[] = [
       },
       {
         id: "2",
-        nombre: "Segundo Semestre",
+        nombre: "2do Semestre",
         materias: [
           {
             id: "1",
             nombre: "Estructuras de Datos",
             grupos: [
               {
-                id: "G1",
+                id: "1",
                 docente: "Luis Torres",
                 horarios: [
                   { dia: "Lunes", horaInicio: "12:45", horaFin: "14:15" },
@@ -100,7 +100,7 @@ export const data: Carrera[] = [
             nombre: "Cálculo Diferencial",
             grupos: [
               {
-                id: "G1",
+                id: "1",
                 docente: "Ana Castillo",
                 horarios: [
                   { dia: "Martes", horaInicio: "08:15", horaFin: "09:45" },
@@ -119,14 +119,14 @@ export const data: Carrera[] = [
     semestres: [
       {
         id: "1",
-        nombre: "Primer Semestre",
+        nombre: "1er Semestre",
         materias: [
           {
             id: "1",
             nombre: "Circuitos Eléctricos I",
             grupos: [
               {
-                id: "G1",
+                id: "1",
                 docente: "Jose Hernandez",
                 horarios: [
                   { dia: "Lunes", horaInicio: "06:45", horaFin: "08:15" },
@@ -139,14 +139,14 @@ export const data: Carrera[] = [
       },
       {
         id: "2",
-        nombre: "Segundo Semestre",
+        nombre: "2do Semestre",
         materias: [
           {
             id: "1",
             nombre: "Electromagnetismo Aplicado",
             grupos: [
               {
-                id: "G1",
+                id: "1",
                 docente: "Sofia Rivera",
                 horarios: [
                   { dia: "Martes", horaInicio: "11:15", horaFin: "12:45" },

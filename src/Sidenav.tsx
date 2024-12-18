@@ -17,7 +17,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import html2canvas from "html2canvas"; // Biblioteca para descargar el horario como imagen
-import ArrowBackIcon from '@mui/icons-material/ArrowBack'; // Icono para regresar
+//import ArrowBackIcon from '@mui/icons-material/ArrowBack'; // Icono para regresar
 import SchoolIcon from '@mui/icons-material/School'; // Icono para las carreras
 import BookIcon from '@mui/icons-material/Book'; // Icono para los semestres
 import SubjectIcon from '@mui/icons-material/MenuBook'; // Icono para las materias
@@ -29,6 +29,8 @@ import DarkModeIcon from '@mui/icons-material/DarkMode'; // Icono para el mode o
 import HelpIcon from '@mui/icons-material/Help'; // Icono de preguntas frecuentes
 import ExpandLess from '@mui/icons-material/ExpandLess'; // ExpandLess y ExpandMore indican si el semestre está expandido o colapsado
 import ExpandMore from '@mui/icons-material/ExpandMore';
+import Breadcrumbs from '@mui/material/Breadcrumbs';
+import Link from '@mui/material/Link';
 import { Button, Collapse, Dialog, DialogActions, DialogContent, DialogContentText, DialogProps, DialogTitle, Stack } from '@mui/material'; // para mostrar u ocultar las materias
 import ScheduleTable from "./components/ScheduleTable"; // Componente tabla de horario
 
@@ -146,11 +148,11 @@ export default function Sidenav() {
     setExpandedMateria(null); // Reiniciar expansión de materias
   };
 
-  const handleBackClick = () => {
+  /*const handleBackClick = () => {
     setSelectedCarrera(null); // Regresar a la lista de carreras
     setExpandedSemestre(null);
     setExpandedMateria(null);
-  };
+  };*/
 
   const handleSemestreClick = (semestreId: string) => {
     setExpandedSemestre((prev) => (prev === semestreId ? null : semestreId)); // Alternar expandir/colapsar
@@ -283,7 +285,28 @@ export default function Sidenav() {
         anchor="left"
         open={open}
       >
-        <DrawerHeader>
+        <DrawerHeader sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingX: 2 }}>
+          {/* Breadcrumbs */}
+          <Breadcrumbs aria-label="breadcrumb">
+            <Link
+              underline="hover"
+              color="inherit"
+              onClick={() => setSelectedCarrera(null)} // Regresar a "Carreras"
+              sx={{
+                cursor: "pointer",
+                "&:hover": {
+                  color: "inherit", // Mantiene el color original al pasar el mouse
+                },
+              }}
+            >
+              Carreras
+            </Link>
+            {selectedCarrera && (
+              <Typography color="text.primary">
+                {selectedCarrera.nombre}
+              </Typography>
+            )}
+          </Breadcrumbs>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
           </IconButton>
@@ -292,7 +315,7 @@ export default function Sidenav() {
         {selectedCarrera ? (
           // Mostrar los semestres de la carrera seleccionada
           <>
-            <List>
+            {/* <List>
               <ListItem disablePadding>
                 <ListItemButton onClick={handleBackClick}>
                   <ListItemIcon>
@@ -304,8 +327,8 @@ export default function Sidenav() {
             </List>
             <Divider />
             <Typography variant='subtitle1' sx={{ padding: 2 }}>
-              {selectedCarrera.nombre} {/*Semestressss*/}
-            </Typography>
+              {selectedCarrera.nombre}
+            </Typography> */}
             <List>
               {selectedCarrera.semestres.map((semestre) => (
                 <React.Fragment key={semestre.id}>
@@ -362,9 +385,9 @@ export default function Sidenav() {
         ) : (
           // Mostrar la lista de carreras
           <>
-            <Typography variant='subtitle1' sx={{ padding: 2 }}>
+            {/* <Typography variant='subtitle1' sx={{ padding: 2 }}>
               Carreras
-            </Typography>
+            </Typography> */}
             <List>
               {data.map((carrera) => (
                 <ListItem key={carrera.id} disablePadding>
