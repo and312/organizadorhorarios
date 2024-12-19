@@ -85,7 +85,7 @@ const ScheduleTable: React.FC<ScheduleTableProps> = ({ horarios }) => {
       component={Paper}
       sx={{
         overflowX: "auto",
-        maxHeight: "80vh", // Scroll vertical
+        //maxHeight: "80vh", // Scroll vertical
         margin: "auto",
       }}
     >
