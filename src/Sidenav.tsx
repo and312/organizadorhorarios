@@ -27,11 +27,12 @@ import CleaningServicesIcon from '@mui/icons-material/CleaningServices'; // Icon
 import ImageIcon from '@mui/icons-material/Image'; // Icono para guardar horario como imagen
 //import DarkModeIcon from '@mui/icons-material/DarkMode'; // Icono para el mode oscuro
 import HelpIcon from '@mui/icons-material/Help'; // Icono de preguntas frecuentes
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLess from '@mui/icons-material/ExpandLess'; // ExpandLess y ExpandMore indican si el semestre está expandido o colapsado
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Link from '@mui/material/Link';
-import { Button, Collapse, Dialog, DialogActions, DialogContent, DialogContentText, DialogProps, DialogTitle, Stack } from '@mui/material'; // para mostrar u ocultar las materias
+import { Accordion, AccordionDetails, AccordionSummary, Button, Collapse, Dialog, DialogActions, DialogContent, DialogContentText, DialogProps, DialogTitle, Stack } from '@mui/material'; // para mostrar u ocultar las materias
 import ScheduleTable from "./components/ScheduleTable"; // Componente tabla de horario
 import { Alert, Snackbar } from '@mui/material'; // Importar Alert y Snackbar para mostrar notificaciones
 
@@ -326,7 +327,63 @@ export default function Sidenav() {
               <DialogTitle id="scroll-dialog-title">Ayuda</DialogTitle>
               <DialogContent dividers={scroll === 'paper'}>
                 <DialogContentText id="scroll-dialog-description">
-                  Contenidoooooo de las preguntasssssssssss
+                  {/* FAQ sobre la creación de horarios */}
+                  <div>
+                    <Accordion>
+                      <AccordionSummary expandIcon={<ExpandMoreIcon />} id="faq1">
+                        <Typography variant="h6">¿Cómo puedo crear un horario?</Typography>
+                      </AccordionSummary>
+                      <AccordionDetails>
+                        <Typography>
+                          Para crear un horario, selecciona las materias que deseas cursar y asigna las horas correspondientes a cada una. Luego, podrás ver la distribución en el calendario y ajustar según sea necesario.
+                        </Typography>
+                      </AccordionDetails>
+                    </Accordion>
+
+                    <Accordion>
+                      <AccordionSummary expandIcon={<ExpandMoreIcon />} id="faq2">
+                        <Typography variant="h6">¿Qué debo hacer si hay conflictos entre las materias?</Typography>
+                      </AccordionSummary>
+                      <AccordionDetails>
+                        <Typography>
+                          Si hay un conflicto de horarios, el sistema te notificará. Puedes ajustar los horarios manualmente o seleccionar otras materias que no tengan conflictos.
+                        </Typography>
+                      </AccordionDetails>
+                    </Accordion>
+
+                    <Accordion>
+                      <AccordionSummary expandIcon={<ExpandMoreIcon />} id="faq3">
+                        <Typography variant="h6">¿Puedo modificar mi horario después de haberlo creado?</Typography>
+                      </AccordionSummary>
+                      <AccordionDetails>
+                        <Typography>
+                          Sí, puedes modificar tu horario en cualquier momento antes de la fecha límite para la inscripción. Solo necesitas acceder a la sección de tu horario y realizar los cambios necesarios.
+                        </Typography>
+                      </AccordionDetails>
+                    </Accordion>
+
+                    <Accordion>
+                      <AccordionSummary expandIcon={<ExpandMoreIcon />} id="faq4">
+                        <Typography variant="h6">¿Cómo puedo ver mi horario en formato visual?</Typography>
+                      </AccordionSummary>
+                      <AccordionDetails>
+                        <Typography>
+                          Una vez que hayas creado tu horario, puedes visualizarlo en formato de tabla o en un calendario, según lo que prefieras. Además, puedes imprimir o descargar el horario como JPG o PDF.
+                        </Typography>
+                      </AccordionDetails>
+                    </Accordion>
+
+                    <Accordion>
+                      <AccordionSummary expandIcon={<ExpandMoreIcon />} id="faq5">
+                        <Typography variant="h6">¿Qué sucede si no agrego todas las materias necesarias?</Typography>
+                      </AccordionSummary>
+                      <AccordionDetails>
+                        <Typography>
+                          El sistema te notificará si hay materias pendientes o necesarias para completar tu plan de estudios. Asegúrate de revisar los requisitos de tu carrera para evitar omisiones.
+                        </Typography>
+                      </AccordionDetails>
+                    </Accordion>
+                  </div>
                 </DialogContentText>
               </DialogContent>
               <DialogActions>
