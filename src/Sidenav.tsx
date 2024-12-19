@@ -218,7 +218,7 @@ export default function Sidenav() {
   };
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: 'flex', background: 'white' }}>
       <CssBaseline />
       <AppBar position="fixed" open={open}>
         <Toolbar>
