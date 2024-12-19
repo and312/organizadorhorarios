@@ -25,7 +25,7 @@ import GroupIcon from '@mui/icons-material/Group'; // Icono para los grupos
 import Checkbox from '@mui/material/Checkbox'; // Check para seleccionar grupo
 import CleaningServicesIcon from '@mui/icons-material/CleaningServices'; // Icono para restablecer horario
 import ImageIcon from '@mui/icons-material/Image'; // Icono para guardar horario como imagen
-import DarkModeIcon from '@mui/icons-material/DarkMode'; // Icono para el mode oscuro
+//import DarkModeIcon from '@mui/icons-material/DarkMode'; // Icono para el mode oscuro
 import HelpIcon from '@mui/icons-material/Help'; // Icono de preguntas frecuentes
 import ExpandLess from '@mui/icons-material/ExpandLess'; // ExpandLess y ExpandMore indican si el semestre está expandido o colapsado
 import ExpandMore from '@mui/icons-material/ExpandMore';
@@ -33,6 +33,7 @@ import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Link from '@mui/material/Link';
 import { Button, Collapse, Dialog, DialogActions, DialogContent, DialogContentText, DialogProps, DialogTitle, Stack } from '@mui/material'; // para mostrar u ocultar las materias
 import ScheduleTable from "./components/ScheduleTable"; // Componente tabla de horario
+import { Alert, Snackbar } from '@mui/material'; // Importar Alert y Snackbar para mostrar notificaciones
 
 // Importacion de las carreras desde el archivo data.ts
 import { data, Carrera, Horario } from './components/data';
@@ -116,6 +117,9 @@ export default function Sidenav() {
   const [openDialog, setOpenDialog] = React.useState(false); // Estado del dialogo de confirmación de restablecimiento
   const [openDialogFAQ, setOpenDialogFAQ] = React.useState(false); // Estado del dialogo de FAQ
   const [scroll, setScroll] = React.useState<DialogProps['scroll']>('paper'); // Scroll sobre el mismo cuadro de dialogo de FAQ
+  const [alertOpen, setAlertOpen] = React.useState(false); // Estado para controlar la alerta de choque de materias
+  const [openAlertDialog, setOpenAlertDialog] = React.useState(false); // cuando se intenta guardar un horario vacio
+
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -165,7 +169,8 @@ export default function Sidenav() {
   };
 
   // Estado para manejar los horarios seleccionados 
-  const handleGrupoCheck = (materia: string, grupo: string, horarios: Horario[]) => {
+  // Funcion probada de choque pero es la que está sin la aletar de choque
+  /*const handleGrupoCheck = (materia: string, grupo: string, horarios: Horario[]) => {
     setSelectedHorarios((prev) => {
       const alreadySelected = prev.some(
         (item) => item.materia === materia && item.grupo === grupo
@@ -182,6 +187,49 @@ export default function Sidenav() {
           materia,
           grupo,
         }));
+        return [...prev, ...newHorarios];
+      }
+    });
+  };*/
+
+  // ya implementado la alerta
+  const handleGrupoCheck = (materia: string, grupo: string, horarios: Horario[]) => {
+    // Mapear los nuevos horarios seleccionados
+    const newHorarios = horarios.map((h) => ({
+      dia: h.dia,
+      horaInicio: h.horaInicio,
+      horaFin: h.horaFin,
+      materia,
+      grupo,
+    }));
+  
+    setSelectedHorarios((prev) => {
+      const alreadySelected = prev.some(
+        (item) => item.materia === materia && item.grupo === grupo
+      );
+  
+      if (alreadySelected) {
+        // Si ya estaba seleccionado, lo eliminamos (sin verificar conflicto)
+        return prev.filter((item) => !(item.materia === materia && item.grupo === grupo));
+      } else {
+        // Si no estaba seleccionado, verificamos si hay conflicto
+        const hasConflict = newHorarios.some((newHorario) =>
+          prev.some(
+            (existingHorario) =>
+              existingHorario.dia === newHorario.dia && // Mismo día
+              !(
+                newHorario.horaFin <= existingHorario.horaInicio || // Sin traslape: termina antes de empezar
+                newHorario.horaInicio >= existingHorario.horaFin // Sin traslape: empieza después de terminar
+              )
+          )
+        );
+  
+        // Mostrar alerta si hay conflicto
+        if (hasConflict) {
+          setAlertOpen(true);
+        }
+  
+        // Retornar el nuevo estado con los horarios añadidos
         return [...prev, ...newHorarios];
       }
     });
@@ -215,6 +263,29 @@ export default function Sidenav() {
         link.click();
       });
     }
+  };
+
+  // para mostrar el diálogo si no hay horarios seleccionados
+  const handleDownloadClick = () => {
+    if (selectedHorarios.length === 0) {
+      handleOpenAlertDialog();
+      return;
+    }
+    handleDownloadImage();
+  };
+
+  // Cerrar alerta de choque de materias
+  const handleCloseAlert = () => {
+    setAlertOpen(false);
+  };
+
+  // Funciones para Abrir y Cerrar el Diálogo de guardar horario vacio
+  const handleOpenAlertDialog = () => {
+    setOpenAlertDialog(true);
+  };
+  
+  const handleCloseAlertDialog = () => {
+    setOpenAlertDialog(false);
   };
 
   return (
@@ -406,6 +477,17 @@ export default function Sidenav() {
       </Drawer>
       <Main open={open}>
         <DrawerHeader />
+        {/* Alerta para choques de horarios */}
+        <Snackbar
+          open={alertOpen}
+          autoHideDuration={4000} // Duración de la alerta
+          onClose={handleCloseAlert}
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        >
+          <Alert onClose={handleCloseAlert} severity="warning" sx={{ width: '100%' }}>
+            Hay un choque de horarios con otro grupo seleccionado.
+          </Alert>
+        </Snackbar>
         {/* Tabla de horarios */}
         <Box sx={{ flexGrow: 1 }}>
           <ScheduleTable horarios={selectedHorarios} />
@@ -437,9 +519,27 @@ export default function Sidenav() {
               </DialogActions>
             </Dialog>
             {/* Botón para GUARDAR el horario como imagen */}
-            <Button variant="contained" onClick={handleDownloadImage} endIcon={<ImageIcon />}>
+            <Button variant="contained" onClick={handleDownloadClick} endIcon={<ImageIcon />}>
               Guardar
             </Button>
+            <Dialog
+              open={openAlertDialog}
+              onClose={handleCloseAlertDialog}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+            >
+              <DialogTitle id="alert-dialog-title">{"Horario Vacío"}</DialogTitle>
+              <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                  Selecciona al menos una materia antes de guardar.
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button variant="contained" onClick={handleCloseAlertDialog} autoFocus>
+                  Aceptar
+                </Button>
+              </DialogActions>
+            </Dialog>
           </Stack>
         </Box>
       </Main>
