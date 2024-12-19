@@ -387,7 +387,7 @@ export default function Sidenav() {
                 </DialogContentText>
               </DialogContent>
               <DialogActions>
-                <Button onClick={handleCloseDialogFAQ}>Aceptar</Button>
+                <Button variant="contained" onClick={handleCloseDialogFAQ}>Aceptar</Button>
               </DialogActions>
             </Dialog>
             {/*<IconButton
