@@ -262,13 +262,13 @@ export default function Sidenav() {
                 <Button onClick={handleCloseDialogFAQ}>Aceptar</Button>
               </DialogActions>
             </Dialog>
-            <IconButton
+            {/*<IconButton
               size="large"
               aria-label="show 17 new notifications"
               color="inherit"
             >
               <DarkModeIcon />
-            </IconButton>
+            </IconButton>*/}
           </Box>
         </Toolbar>
       </AppBar>
